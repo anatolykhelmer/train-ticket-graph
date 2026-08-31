@@ -1,0 +1,28 @@
+{
+  "nodes": [
+    { "name": "frontend", "kind": "service", "publicExposed": true, "language": "java" },
+    {
+      "name": "order-service",
+      "kind": "service",
+      "publicExposed": false,
+      "vulnerabilities": [
+        {
+          "file": "order/OrderServiceImpl.java",
+          "severity": "high",
+          "message": "File open from tainted variable",
+          "metadata": { "cwe": "CWE-22" }
+        }
+      ]
+    },
+    {
+      "name": "prod-postgresdb",
+      "kind": "rds",
+      "metadata": { "cloud": "AWS", "engine": "postgres" }
+    },
+    { "name": "isolated", "kind": "service", "publicExposed": false }
+  ],
+  "edges": [
+    { "from": "frontend", "to": ["order-service"] },
+    { "from": "order-service", "to": ["prod-postgresdb"] }
+  ]
+}
